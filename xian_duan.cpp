@@ -66,8 +66,44 @@ public :
         }
         return tree[index] ;
     }
+
+    //更新线段树
+    void set(int index, int a)  
+    {
+        if(index < 0 || index < l)
+        {
+            throw exception();
+        }
+        tree[index] = a ;   
+
+        set(0, 0, l-1, index, a) ;
+    }
     
-    //线段树的查询
+
+    void set(int treeindex, int left, int right, int index, int e)
+    {
+        if(left == right)
+        {
+            tree[index] = e ;
+            return  ;
+        }
+
+        int mid = l + (right-left)/2 ;
+        int leftIndex = leftChild(treeindex) ;
+        int rightIndex = rightChild(treeindex) ;
+        
+        if(index >= mid + 1)
+        {
+            set(rightIndex, mid+1, right, index, e) ;
+        }
+        else
+        {
+            set(leftIndex, l, mid, index, e) ;  
+        }
+        tree[treeindex] = tree[leftIndex] + tree[rightIndex] ;
+    }
+
+    //线段树的查询 
     int query(int ql, int qr)
     {
         if(ql > qr|| ql > l || qr < 0 || qr > l)
